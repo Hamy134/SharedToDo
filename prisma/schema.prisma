@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Workspace {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+
+  publicId  String    @unique @default(uuid())
+  isPublic  Boolean   @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  todos     Todo[]    // Define the todos relationship here
+}
+
+model Todo {
+  id          String    @id @default(uuid())
+  task        String    @db.VarChar(60)
+  description String?   @db.Char(200)
+  order       Int
+
+  isCompleted Boolean   @default(false)
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  subtasks    SubTask[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([workspaceId])
+}
+
+model SubTask {
+  id          String   @id @default(uuid())
+  task        String
+  order       Int
+
+  isCompleted Boolean  @default(false)
+
+  todoId      String
+  todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([todoId])
+}
+
+model UserSubscription {
+  id                    String    @id @default(uuid())
+  userId                String    @unique
+
+  stripeCustomerId      String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId  String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId         String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
