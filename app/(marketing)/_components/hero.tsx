@@ -73,9 +73,8 @@ export const Hero = () => {
             </>
           }
         >
-          <Image
-            src={`/features/img1.png`}
-            alt="hero"
+          <video autoPlay muted loop playsInline
+            src={`/features/replacementvideo.mp4`}
             height={720}
             width={1400}
             className="mx-auto rounded-2xl object-cover h-full object-left-top"

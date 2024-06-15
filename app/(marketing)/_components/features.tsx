@@ -28,7 +28,7 @@ const Feature = ({ index, title, description, image }: FeatureProps) => (
       className={cn("max-w-xl mx-auto", index % 2 === 0 && "md:order-first")}
     >
       <div className="md:pl-4 lg:pl-12 xl:pl-16">
-        <h1 className="text-2xl text-yellow-600 mb-2">{title}</h1>
+        <h1 className="text-2xl text-yellow-500 mb-2">{title}</h1>
         <p className="text-md dark:text-gray-400 mb-4">{description}</p>
       </div>
     </div>
